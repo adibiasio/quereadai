@@ -1,2 +1,4 @@
 .DS_Store
 queread/
+Pipfile
+Pipfile.lock
