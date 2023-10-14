@@ -91,6 +91,7 @@ def initialize_gradio():
 def gradio():
     return render_template('gradio.html')
 
+application = Flask(__name__)
 
 if __name__ == '__main__':
     app.run(debug=True)
