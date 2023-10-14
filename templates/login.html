@@ -1,16 +1,188 @@
 <!doctype html>
-<html>
-  <body>
-    <button onclick="redirectToGoogleLogin()">Login with Google</button>
-    <script>
-      function redirectToGoogleLogin() {
-        window.location.href = "/google-login";
-      }
-    </script>
-    <a href="google/">
-    <img id="google"
-        src="https://img.shields.io/badge/Google-Connect-brightgreen?style=for-the-badge&labelColor=black&logo=google"
-        alt="Google"> <br>
-    </a>
-  </body>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Prism - Bootstrap 4 Open Source Landing Page Template</title>
+    <meta name="description" content="Prism is a beautiful Bootstrap 4 template for open-source landing pages."/>
+
+    <!--Google font-->
+    <link href="https://fonts.googleapis.com/css?family=K2D:300,400,500,700,800" rel="stylesheet">
+
+    <!-- Bootstrap CSS / Color Scheme -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+</head>
+<body>
+
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=PT+Mono);
+
+</style>
+<!--Header Section-->
+<section class="bg-gradient pt-5 pb-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex flex-row align-items-center justify-content-between">
+                <div class="heading-brand">QuereadAI</div>
+                <a href="https://prismjs.com/download.html" class="btn btn-dark" target="_blank">Some Other Button</a>
+            </div>
+        </div>
+        <div class="row mt-6">
+            <div class="col-md-8 mx-auto text-center">
+                <h1>Create your own Chat Bot</h1>
+                <p class="lead mb-5">QuereadAI is the newest way to utilize the power of natural language processing tools. 
+                    By adding your own files, you can make your own Chat Bot that knows anything you want it to.</p>
+                <a href="google/" class="btn btn-success svg-icon">
+                    <em class="mr-2" data-feather="database"></em>
+                    Login
+                </a>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-9 mx-auto">
+                <div class="code-window">
+                    <div class="dots">
+                        <div class="red"></div>
+                        <div class="orange"></div>
+                        <div class="green"></div>
+                    </div>
+                    <br></br>
+                    <h1><span id="auto-input">&nbsp;&nbsp;&nbsp;&nbsp;Hey, </span></h1>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section
+<section class="py-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2 class="text-center text-md-left">Reasons Why People Love <span class="text-success">QuereadAI</span></h2>
+                <div class="row feature-grid">
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <div class="icon-box">
+                                <div class="icon-box-inner">
+                                    <span data-feather="check-circle" width="28" height="28"></span>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                Extremely Accurate
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <div class="icon-box">
+                                <div class="icon-box-inner">
+                                    <span data-feather="command" width="28" height="28"></span>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                Highly Intuitive
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <div class="icon-box">
+                                <div class="icon-box-inner">
+                                    <span data-feather="feather" width="28" height="28"></span>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                No Downloads
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <div class="icon-box">
+                                <div class="icon-box-inner">
+                                    <span data-feather="zap" width="28" height="28"></span>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                Blazing Fast
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <div class="icon-box">
+                                <div class="icon-box-inner">
+                                    <span data-feather="git-pull-request" width="28" height="28"></span>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                Configurable
+                            </div>
+                        </div>
+                    </div><div class="col-sm-6">
+                        <div class="media">
+                            <div class="icon-box">
+                                <div class="icon-box-inner">
+                                    <span data-feather="droplet" width="28" height="28"></span>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                Easy Configuration
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<!--Used By Section-->
+<!-- <section class="pb-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2 class="text-center text-md-left">Upload any kind of text file.</h2>
+                <p class="lead text-muted">Whether it is class notes, handbooks or essays, QuereadAI can read it.</p>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<footer class="py-5 bg-light">
+    <div class="container">
+        <div class="row my-2">
+            <div class="col-md-4 mx-auto text-muted text-center small-xl"> 
+                &#9786; HackGT 2023 &#9786;
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.7.3/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script>
+    $(function () {
+        // init feather icons
+        feather.replace();
+    });
+</script>
+<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+<script>
+    var typed = new Typed('#auto-input', {
+      strings: ["&nbsp;&nbsp;&nbsp;&nbsp;Hey, when is homework 5 due?", "&nbsp;&nbsp;&nbsp;&nbsp;Hey, when is exam 1?", "&nbsp;&nbsp;&nbsp;&nbsp;Hey, how much are labs worth?"],
+      typeSpeed: 50,
+      backSpeed: 50,
+      loop: true
+    });
+  </script>
+</body>
 </html>
