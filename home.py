@@ -15,8 +15,9 @@ CSS ="""
 .gradio-container { height: 100vh !important; }
 #chatbot { flex-grow: 1; overflow: auto; }
 #upload { flex-grow: 1; overflow: auto; }
-#col1 { height: 95vh !important; }
-#col2 { height: 95vh !important; }
+#col1 { height: 92vh !important; }
+#col2 { height: 92vh !important; }
+#txt { padding-left: 5px; }
 footer { display:none !important }
 """
  
@@ -72,7 +73,7 @@ def initialize_gradio():
                 f"""
                 # Hello, {user.given_name}. 
                 # Welcome to Queread AI
-                """)
+                """, elem_id="txt")
                 file_output = gr.File(elem_id="upload")
                 upload_button = gr.UploadButton("Click to Upload a File", file_types=["image", "video"], file_count="multiple")
                 upload_button.upload(upload_file, upload_button, file_output)
