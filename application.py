@@ -89,6 +89,8 @@ def google_auth():
     global user_email
     user = token['userinfo']
     user_email = user["given_name"]
+    print("TEST")
+    print(user_email)
     threading.Thread(target=initialize_gradio).start()
     collection = chroma_client.get_or_create_collection(name=user_email, embedding_function=openai_embed_function)
     return redirect(url_for('gradio'))
