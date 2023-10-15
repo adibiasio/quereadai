@@ -51,6 +51,11 @@ html {
   -ms-overflow-style: scrollbar;
   -webkit-tap-highlight-color: transparent; }
 
+
+  .footer {
+    flex-shrink: 0;
+    /* Prevent the footer from shrinking when there's not enough content */
+}
 @-ms-viewport {
   width: device-width; }
 
@@ -65,6 +70,9 @@ body {
   line-height: 1.5;
   color: #343a40;
   text-align: left;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: #ffffff; }
 
 [tabindex="-1"]:focus {
@@ -5086,7 +5094,8 @@ footer a {
 
 /*Gradients*/
 .bg-gradient {
-  background: linear-gradient(#ffff00, #ffff4d); }
+  background: linear-gradient(#ffff00, #ffff4d); 
+  flex: 1;}
 
 /*Code Window*/
 .code-window {
