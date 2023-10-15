@@ -137,7 +137,7 @@ def initialize_gradio():
                 msg = gr.Textbox()
                 clear = gr.ClearButton([msg, chatbot])
                 msg.submit(respond, [msg, chatbot], [msg, chatbot])
-    demo.launch()
+    demo.launch(server_port=9000)
 
 
 @app.route('/gradio')
