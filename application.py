@@ -13,19 +13,41 @@ from chromadb.utils import embedding_functions
 from chromadb.config import Settings
 from langchain.vectorstores import Chroma
 import threading
-import random
+import boto3
+from botocore.exceptions import ClientError
 import time
-import io
 import os
-os.environ['OPENAI_API_KEY'] = "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"
+
+def get_secret(secret_name): 
+    region_name = "us-east-1"
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+    return get_secret_value_response['SecretString'][get_secret_value_response['SecretString'].index(":")+2:-2]
+
 
 app = Flask(__name__)
-app.secret_key = '1u2h3h5h1985h1b'
+app.secret_key = get_secret("flask_secret_key")
 
 oauth = OAuth(app)
+open_ai_api_key = get_secret("OPENAI_KEY")
+os.environ['OPENAI_API_KEY'] = open_ai_api_key
+
 chroma_client = chromadb.HttpClient(host='3.84.129.6', port=8000)
-openai_embed_function = embedding_functions.OpenAIEmbeddingFunction("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")
+openai_embed_function = embedding_functions.OpenAIEmbeddingFunction(open_ai_api_key)
+
 collection = None
+pdfname_collection = None
+file_output = None
+
 
 CSS ="""
 .contain { display: flex; flex-direction: column; }
@@ -37,30 +59,11 @@ CSS ="""
 #txt { padding-left: 5px; }
 footer { display:none !important }
 """
- 
-# def get_secret(secret_name): 
-
-#     region_name = "us-east-1"
-
-#     # Create a Secrets Manager client
-#     session = boto3.session.Session()
-#     client = session.client(
-#         service_name='secretsmanager',
-#         region_name=region_name
-#     )
-
-#     try:
-#         get_secret_value_response = client.get_secret_value(
-#             SecretId=secret_name
-#         )
-#     except ClientError as e:
-#         raise e
-
-#     return get_secret_value_response['SecretString']
 
 
 @app.route('/', methods=['GET'])
 def index():
+    print('awd')
     return render_template('login.html')
  
  
@@ -68,16 +71,14 @@ def index():
 def google():     
     oauth.register(
         name='google',
-        client_id='514310494310-sfr3q4obp9as81862bt291g8bombbps3.apps.googleusercontent.com',
-        client_secret='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',
+        client_id=get_secret("oauth_client_id"),
+        client_secret=get_secret("oauth_client_secret"),
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
         client_kwargs={ 
             'scope': 'openid email profile'
         }
     )
-    # Redirect to google_auth function
     redirect_uri = url_for('google_auth', _external=True)
-    print(redirect_uri)
     return oauth.google.authorize_redirect(redirect_uri)
  
  
@@ -88,22 +89,23 @@ def google_auth():
     global user_email
     user = token['userinfo']
     user_email = user["given_name"]
-    # print(get_secret("OPENAI_API_KEY"))
     threading.Thread(target=initialize_gradio).start()
     collection = chroma_client.get_or_create_collection(name=user_email, embedding_function=openai_embed_function)
     return redirect(url_for('gradio'))
 
 
-def upload_file(files):
+def upload_file(files=None):
     collection = chroma_client.get_or_create_collection(name=user_email, embedding_function=openai_embed_function)
-    for file in files:
-        loader = PyPDFLoader(file.name)
-        documents = loader.load()
-        # Splitting Recitation Guide into text chunks
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-        texts = text_splitter.split_documents(documents)
-    collection.add(documents=[text.page_content for text in texts], ids=[file.name + str(i) for i in range(len(texts))])
-    file_paths = [file.name for file in files]
+    pdfname_collection = chroma_client.get_or_create_collection(name=user_email+"pdf")
+    if files:
+        for file in files:
+            pdfname_collection.add(ids=file.name, embeddings = [0])
+            loader = PyPDFLoader(file.name)
+            documents = loader.load()
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+            texts = text_splitter.split_documents(documents)
+        collection.add(documents=[text.page_content for text in texts], ids=[file.name + str(i) for i in range(len(texts))])
+    file_paths = [filename for filename in pdfname_collection.peek(pdfname_collection.count())['ids']]
     return file_paths
 
 
@@ -126,7 +128,8 @@ def initialize_gradio():
                 # Hello, {user.given_name}. 
                 # Welcome to Queread AI
                 """, elem_id="txt")
-                file_output = gr.File(elem_id="upload", interactive=False, file_count="multiple")
+                print(upload_file(None))
+                file_output = gr.File(value=upload_file(None), elem_id="upload", interactive=False, file_count="multiple")
                 upload_button = gr.UploadButton("Click to Upload a File", file_types=["pdf"], file_count="multiple")
                 upload_button.upload(upload_file, upload_button, file_output)
             with gr.Column(scale=4, elem_id="col2"):
@@ -134,16 +137,16 @@ def initialize_gradio():
                 msg = gr.Textbox()
                 clear = gr.ClearButton([msg, chatbot])
                 msg.submit(respond, [msg, chatbot], [msg, chatbot])
-
     demo.launch()
 
 
-# Gradio route r
 @app.route('/gradio')
 def gradio():
     return render_template('gradio.html')
 
+
 application = Flask(__name__)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
